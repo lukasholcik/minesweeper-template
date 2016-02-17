@@ -10,6 +10,11 @@ class Mine implements ng.IDirective {
     public template = require("./mine.directive.html");
     public controller = MineController;
     public controllerAs = "vm";
+    public scope = true;
+    public bindToController = {
+        mine: "=",
+        disabled: "&"
+    };
 
 }
 
