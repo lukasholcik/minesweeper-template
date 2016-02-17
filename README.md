@@ -1,5 +1,15 @@
 # SolarWinds MineSweeper programming contest
 
+## How to start project
+
+### Prerequisites
+
+    npm install -g gulp tsd bower typescript
+
+### How to run project
+
+    gulp
+
 ## MineSweeper rules
 
 The rules of minesweeper are simple:
