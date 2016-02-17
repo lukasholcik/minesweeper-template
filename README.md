@@ -36,15 +36,15 @@ revealed mine, flagged, etc. It contains a styled button and should handle it's 
 current state of the cell.
 
 The states of the cell are listed in MinefieldCellStatus class members:
-    - HIDDEN - default state of the cell
-    - REVEALED - after clicking on the cell it shows whether there is a mine or the number of adjacent cells 
+- HIDDEN - default state of the cell
+- REVEALED - after clicking on the cell it shows whether there is a mine or the number of adjacent cells 
                 containing mines
-    - FLAGGED - you can flag the cell by shift-click if you suspect it to contain a mine
+- FLAGGED - you can flag the cell by shift-click if you suspect it to contain a mine
 
 CSS classes to be used during mine component implementation:
 
-    - .sw-mine__button--hidden: for hidden cell
-    - .sw-mine__button--revealed: for revealed cell
-    - .sw-mine__button--has-mine: for revealed cell with mine
-    - .sw-mine__button--flagged: for flagged cell
-    - .sw-mine__button--neighbours-1 ... .sw-mine__button--neighbours-8: for revealed cells with respective neighbour counts 
+- .sw-mine__button--hidden: for hidden cell
+- .sw-mine__button--revealed: for revealed cell
+- .sw-mine__button--has-mine: for revealed cell with mine
+- .sw-mine__button--flagged: for flagged cell
+- .sw-mine__button--neighbours-1 ... .sw-mine__button--neighbours-8: for revealed cells with respective neighbour counts 
