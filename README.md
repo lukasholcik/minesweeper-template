@@ -1,5 +1,7 @@
 # SolarWinds MineSweeper programming contest
 
+![hello](https://raw.githubusercontent.com/lukasholcik/minesweeper-template/master/minesweeper.png)
+
 ## How to start project
 
 ### Prerequisites
