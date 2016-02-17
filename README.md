@@ -8,6 +8,7 @@
 
 ### How to run project
 
+    npm install
     gulp
 
 ## MineSweeper rules
