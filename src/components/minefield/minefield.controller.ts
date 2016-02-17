@@ -12,7 +12,11 @@ export enum EGameStatus {
  */
 class MinefieldController {
 
-    constructor(private swMinefieldService:MinefieldService) {
+    /**
+     * @param swMinefieldService
+     * @param $sce this service can be used to trust html from a string e.g. $sce.trustAsHtml("&nbsp;")
+     */
+    constructor(private swMinefieldService:MinefieldService, private $sce:ng.ISCEService) {
     }
 
 }
