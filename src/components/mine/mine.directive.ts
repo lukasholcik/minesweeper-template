@@ -18,8 +18,9 @@ class Mine implements ng.IDirective {
         cellData: "=",
         /**
          * Whether this cell is disabled. The whole minefield will be disabled once the game is finished.
+         * This flag should disable the .sw-mine__button inside the directive.
          */
-        disabled: "&"
+        disabled: "@"
     };
 
 }

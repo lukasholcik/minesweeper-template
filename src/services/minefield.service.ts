@@ -33,6 +33,14 @@ class MinefieldService {
         return minefield;
     }
 
+    /**
+     * Uncover given cell on given minefield. All neighbours are uncovered as well in case there are
+     * no mines on adjacent cells.
+     *
+     * @param mine
+     * @param minefield
+     * @returns {number}
+     */
     public uncover(mine:IMinefieldCell, minefield:MinefieldData):number {
         if (mine.status === MinefieldCellStatus.REVEALED) {
             return 0;

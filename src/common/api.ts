@@ -27,10 +27,22 @@ export interface IMinefieldCell {
     neighbours: number;
 }
 
+/**
+ * One cell of the minefield
+ */
 export class MinefieldCell implements IMinefieldCell {
 
+    /**
+     * @inheritDoc
+     */
     public neighbours = 0;
+    /**
+     * @inheritDoc
+     */
     public hasMine = false;
+    /**
+     * @inheritDoc
+     */
     public status = MinefieldCellStatus.HIDDEN;
 
     constructor(public x:number, public y:number) {
@@ -38,18 +50,39 @@ export class MinefieldCell implements IMinefieldCell {
 
 }
 
+/**
+ * Model for minefield. Contains a matrix with cell information
+ */
 export class MinefieldData {
 
+    /**
+     * @param width Width of the minefield
+     * @param height Height of the minefield
+     * @param mines Number of mines scattered throughout the minefield
+     * @param matrix Matrix with minefield cells. The properties of the minefield must correspond to the
+     */
     constructor(public width: number,
                 public height: number,
                 public mines: number,
                 private matrix:IMinefieldCell[][]) {
     }
 
+    /**
+     * Retrieve cell information on given coordinates
+     *
+     * @param x
+     * @param y
+     * @returns {IMinefieldCell}
+     */
     public get(x: number, y: number):IMinefieldCell {
         return this.matrix[y][x];
     }
 
+    /**
+     * Retrieves all neighbours for given cell (horizontal, vertical and diagonal)
+     * @param cell
+     * @returns {Array}
+     */
     public getNeighbours(cell:IMinefieldCell):IMinefieldCell[] {
         const result = [];
         for (let x = Math.max(0, cell.x - 1); x <= Math.min(this.width - 1, cell.x + 1); x++) {

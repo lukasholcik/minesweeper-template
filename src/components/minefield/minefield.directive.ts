@@ -15,7 +15,7 @@ class Minefield {
         /**
          * This is the displayed minefield of type `MinefieldData`
          */
-        minefield: "="
+        minefieldData: "="
     };
 
 }

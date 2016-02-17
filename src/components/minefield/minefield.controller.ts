@@ -11,6 +11,9 @@ export enum EGameStatus {
  */
 class MinefieldController {
 
+    constructor(private swMinefieldService:MinefieldService) {
+    }
+
 }
 
 export default MinefieldController;

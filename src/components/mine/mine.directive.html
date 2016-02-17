@@ -1,5 +1,13 @@
 <div class="sw-mine">
-    <button class="sw-mine__button">
-        -
+    <!--
+        TODO: Modify vm.cellData.status (look at MinefieldCellStatus type for list of values)
+
+        - click on hidden cell: reveal the cell
+        - shift-click on hidden cell: flag the cell
+        - middle-click on revealed cell where the number of flagged adjacent cells is the same as
+          vm.cellData.neighbours reveals are hidden neighbours
+    -->
+
+    <button class="sw-mine__button" ng-class="vm.getButtonClasses()">
     </button>
 </div>
