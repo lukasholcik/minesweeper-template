@@ -1,0 +1,23 @@
+{
+  "name": "SolarWinds MineSweeper",
+  "description": "SolarWinds MineSweeper",
+  "main": "index.js",
+  "authors": [
+    "Lukáš H. <lukas.holcik@gmail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.5.0",
+    "angular-sanitize": "~1.5.0",
+    "jquery": "~2.2.0",
+    "angular-ui-router": "~0.2.18"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "removeComments": false,
+    "sourceMap": false,
+    "module": "commonjs",
+    "noImplicitAny": false
+  },
+  "exclude": [
+    "node_modules",
+    "bower_components"
+  ],
+  "files": [
+    "src/index.ts"
+  ]
+}

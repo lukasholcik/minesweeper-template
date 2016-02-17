@@ -1,0 +1,68 @@
+@mine-size: 30px;
+
+.sw-mine {
+    height: 100%;
+
+    &__button {
+        height: @mine-size;
+        width: 100%;
+        //line-height: @mine-size;
+        font-weight: bold;
+        font-family: monospace;
+        font-size: 20px;
+
+        &--hidden {
+            cursor: pointer;
+            background-color: #bbb;
+        }
+
+        &--revealed {
+            cursor: default;
+            border: none;
+        }
+
+        &--has-mine {
+            background-color: red;
+            color: transparent;
+        }
+
+        &--flagged {
+            background-color: green;
+        }
+
+        &--neighbours {
+
+            &-1 {
+                color: blue;
+            }
+
+            &-2 {
+                color: green;
+            }
+
+            &-3 {
+                color: red;
+            }
+
+            &-4 {
+                color: navy;
+            }
+
+            &-5 {
+                color: darkred;
+            }
+
+            // don't know!
+            &-6 {
+            }
+
+            &-7 {
+            }
+
+            &-8 {
+            }
+
+        }
+    }
+
+}
