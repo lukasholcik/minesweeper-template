@@ -1,16 +1,15 @@
 ///<reference path="../../ref.d.ts"/>
 
 import MinefieldData from "../minefield/minefield.controller";
-import {IMinefieldCell} from "../../common/api";
-import {MinefieldCell} from "../../common/api";
 import MinefieldService from "../../services/minefield.service";
+import * as api from "../../common/api";
 
 /**
  * @ngInject
  */
 class MineController {
 
-    public cellData:MinefieldCell;
+    public cellData:api.MinefieldCell;
 
     constructor(private swMinefieldService:MinefieldService) {
     }

@@ -2,6 +2,7 @@
 
 import "./mine.directive.less";
 import MineController from "./mine.controller";
+import * as api from "../../common/api";
 
 class Mine implements ng.IDirective {
 

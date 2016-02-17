@@ -2,6 +2,7 @@
 
 import "./minefield.directive.less";
 import MinefieldController from "./minefield.controller";
+import * as api from "../../common/api";
 
 class Minefield {
 

@@ -1,4 +1,5 @@
 import MinefieldService from "../../services/minefield.service";
+import * as api from "../../common/api";
 
 export enum EGameStatus {
     NONE = 0,
