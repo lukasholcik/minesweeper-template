@@ -41,7 +41,7 @@ class MinefieldService {
      * @param minefield
      * @returns {number}
      */
-    public uncover(mine:IMinefieldCell, minefield:MinefieldData):number {
+    public reveal(mine:IMinefieldCell, minefield:MinefieldData):number {
         if (mine.status === MinefieldCellStatus.REVEALED) {
             return 0;
         }
@@ -50,7 +50,7 @@ class MinefieldService {
         if (!mine.hasMine && mine.neighbours === 0) {
             for (let neighbour of minefield.getNeighbours(mine)) {
                 if (neighbour.status === MinefieldCellStatus.HIDDEN) {
-                    uncovered += this.uncover(neighbour, minefield);
+                    uncovered += this.reveal(neighbour, minefield);
                 }
             }
         }
