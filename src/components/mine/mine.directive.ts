@@ -2,6 +2,7 @@
 
 import "./mine.directive.less";
 import MineController from "./mine.controller";
+import MinefieldController from "../minefield/minefield.controller";
 import * as api from "../../common/api";
 
 class Mine implements ng.IDirective {
@@ -12,6 +13,7 @@ class Mine implements ng.IDirective {
     public controller = MineController;
     public controllerAs = "vm";
     public scope = true;
+    public require = ["swMine", "^swMinefield"];
     public bindToController = {
         /**
          * IMinefieldCell data for given cell
@@ -23,6 +25,12 @@ class Mine implements ng.IDirective {
          */
         disabled: "@"
     };
+
+    public link = ($scope:ng.IScope, element:ng.IAugmentedJQuery, attrs:ng.IAttributes,
+                   ctrl:any[])=> {
+        const mineCtrl:MineController = ctrl[0];
+        const minefieldCtrl:MinefieldController = ctrl[1];
+    }
 
 }
 
