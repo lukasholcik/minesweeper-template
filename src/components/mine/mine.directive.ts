@@ -12,7 +12,13 @@ class Mine implements ng.IDirective {
     public controllerAs = "vm";
     public scope = true;
     public bindToController = {
-        mine: "=",
+        /**
+         * IMinefieldCell data for given cell
+         */
+        cellData: "=",
+        /**
+         * Whether this cell is disabled. The whole minefield will be disabled once the game is finished.
+         */
         disabled: "&"
     };
 

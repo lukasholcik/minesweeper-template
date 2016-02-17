@@ -12,9 +12,12 @@ class Minefield {
     public controllerAs = "vm";
     public scope = true;
     public bindToController = {
+        /**
+         * This is the displayed minefield of type `MinefieldData`
+         */
         minefield: "="
     };
-    
+
 }
 
 export default Minefield;
