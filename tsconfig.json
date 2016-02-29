@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES5",
     "removeComments": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "module": "commonjs",
     "noImplicitAny": false
   },
@@ -11,6 +11,5 @@
     "bower_components"
   ],
   "files": [
-    "src/index.ts"
   ]
 }

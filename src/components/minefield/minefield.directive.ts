@@ -1,7 +1,7 @@
 ///<reference path="../../ref.d.ts"/>
 
 import "./minefield.directive.less";
-import MinefieldController from "./minefield.controller";
+import MinefieldController from "./minefield.controller.ts";
 import * as api from "../../common/api";
 
 class Minefield {

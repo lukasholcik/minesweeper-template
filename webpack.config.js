@@ -8,8 +8,6 @@ var context = path.join(__dirname, "src");
 module.exports = {
     context: context,
     entry: [
-        "webpack/hot/dev-server",
-        "webpack-hot-middleware/client",
         "./styles/main.less",
         "./index.ts"
     ],
@@ -32,9 +30,10 @@ module.exports = {
     output: {
         path: serve,
         filename: "js/app.js",
-        publicPath: "/"
+        publicPath: "/",
+        sourceMapFilename: "[file].map"
     },
-    //devtool: "inline-source-map",
+    devtool: "source-map",
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
@@ -42,7 +41,7 @@ module.exports = {
             angular: "angular"
         }),
         new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
+        //new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin()
     ],
     /**

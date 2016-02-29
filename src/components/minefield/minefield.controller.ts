@@ -2,7 +2,7 @@ import MinefieldService from "../../services/minefield.service";
 import * as api from "../../common/api";
 
 export enum EGameStatus {
-    NONE = 0,
+    IN_PROGRESS = 0,
     SUCCESS = 1,
     FAIL = -1
 }
@@ -12,11 +12,23 @@ export enum EGameStatus {
  */
 class MinefieldController {
 
+    public gameStatus:EGameStatus = EGameStatus.IN_PROGRESS;
+
     /**
      * @param swMinefieldService
-     * @param $sce this service can be used to trust html from a string e.g. $sce.trustAsHtml("&nbsp;")
      */
-    constructor(private swMinefieldService:MinefieldService, private $sce:ng.ISCEService) {
+    constructor(private swMinefieldService:MinefieldService) {
+    }
+
+    /**
+     * Click callback for given cell
+     */
+    public onClick = (cellData:api.IMinefieldCell)=> {
+
+    };
+
+    public isDisabled():boolean {
+        return false;
     }
 
 }

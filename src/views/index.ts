@@ -7,10 +7,10 @@ export default (module:ng.IModule)=> {
 
     /* @ngInject */
     module.config(($stateProvider:ng.ui.IStateProvider, $urlRouterProvider:ng.ui.IUrlRouterProvider)=> {
-        $urlRouterProvider.otherwise('/game');
+        $urlRouterProvider.otherwise('/');
 
         $stateProvider.state('game', {
-            url: '/game',
+            url: '/',
             template: require("./game/game.html"),
             controller: "GameController",
             controllerAs: "vm",

@@ -1,10 +1,10 @@
 ///<reference path="../ref.d.ts"/>
 
 import toFactory from "../common/to-factory";
-import Minefield from "./minefield/minefield.directive";
-import Mine from "./mine/mine.directive";
+import Minefield from "./minefield/minefield.directive.ts";
+import Mine from "./cell/cell.directive.ts";
 
 export default (module:ng.IModule) => {
     module.directive("swMinefield", toFactory(Minefield));
-    module.directive("swMine", toFactory(Mine));
+    module.directive("swCell", toFactory(Mine));
 }
