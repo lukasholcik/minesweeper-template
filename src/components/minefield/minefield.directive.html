@@ -1,24 +1,14 @@
 <div class="sw-minefield">
 
     <p>
-        TODO:
-        <ul>
-            <li>Open <code>src/components/minefield/minefield.directive.html</code>
-                and implement the minefield matrix display.</li>
-            <li>In this template you can access the minefield data using <code>vm.minefieldData.matrix</code>.
-                It's a two-dimensional array of <code>MinefieldCell</code> objects.</li>
-        </ul>
-
-        Example of first mine in the matrix:
-        <pre>{{vm.minefieldData.matrix[0][0]}}</pre>
-
-        Put the minefield here:
+        Example of first mine in the matrix: {{vm.minefield.matrix[0][0]}}
     </p>
 
+    <!-- This will be the minefield: -->
     <table cellpadding="0" cellspacing="0" class="sw-minefield__table">
         <tr class="sw-minefield__row">
             <td class="sw-minefield__cell">
-                <sw-cell cell-data="vm.minefieldData.matrix[0][0]" disabled="vm.isDisabled()"
+                <sw-cell cell-data="vm.minefield.matrix[0][0]" disabled="vm.isDisabled()"
                          on-click="vm.onClick(cellData)"></sw-cell>
             </td>
         </tr>

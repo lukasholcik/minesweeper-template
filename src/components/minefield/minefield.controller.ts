@@ -8,7 +8,7 @@ import EGameStatus from "../game/game.controller";
  */
 class MinefieldController {
 
-    public minefieldData:api.MinefieldData;
+    public minefield:api.MinefieldData;
     public gameStatus:EGameStatus;
 
     /**

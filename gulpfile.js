@@ -4,6 +4,7 @@ var path = require("path");
 var gulp = require("gulp");
 var util = require('util');
 var gutil = require("gulp-util");
+var karma = require("karma");
 var $ = require('gulp-load-plugins')({
     pattern: ['gulp-*', 'del', 'run-sequence']
 });
@@ -119,3 +120,30 @@ gulp.task("serve", function (callback) {
         callback
     )
 });
+
+/**
+ * Run all unit tests with coverage report
+ */
+gulp.task("test", function (callback) {
+    runTests(false, callback);
+});
+
+function runTests(singleRun, coverage, teamcity, callback) {
+    var reporters = ["progress"];
+    var preprocessors = {
+        "**/*.ts": ["webpack"]
+    };
+
+    var localConfig = {
+        configFile: path.resolve(__dirname, "karma.conf.js"),
+        singleRun: singleRun,
+        autoWatch: !singleRun,
+        reporters: reporters,
+        preprocessors: preprocessors
+    };
+
+    var server = new karma.Server(localConfig, function (failCount) {
+        callback(failCount ? new Error("Tests failed.") : null);
+    });
+    server.start();
+}

@@ -16,7 +16,7 @@ class Minefield {
         /**
          * This is the displayed minefield of type `MinefieldData`
          */
-        minefieldData: "=",
+        minefield: "=",
         /**
          * Game status
          */
