@@ -1,16 +1,15 @@
 ///<reference path="../../ref.d.ts"/>
 
 import "./cell.directive.less";
-import MineController from "./cell.controller.ts";
-import MinefieldController from "../minefield/minefield.controller.ts";
+import CellController from "./cell.controller.ts";
 import * as api from "../../common/api";
 
-class Mine implements ng.IDirective {
+class Cell implements ng.IDirective {
 
     public restrict = "E";
     public replace = true;
-    public template = require("./cell.directive.html");
-    public controller = MineController;
+    public template = require<string>("./cell.directive.html");
+    public controller = CellController;
     public controllerAs = "vm";
     public scope = true;
     public require = ["swMine", "^swMinefield"];
@@ -32,4 +31,4 @@ class Mine implements ng.IDirective {
 
 }
 
-export default Mine;
+export default Cell;

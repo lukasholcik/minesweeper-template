@@ -1,12 +1,21 @@
-import MinefieldService from "../../services/minefield.service";
+import MinefieldService from "../../services/minefield.service.ts";
 import {MinefieldData} from "../../common/api";
 
+export enum EGameStatus {
+    IN_PROGRESS = 0,
+    SUCCESS = 1,
+    FAIL = -1
+}
+
+/**
+ * @ngInject
+ */
 class GameController {
 
     public minefield:MinefieldData;
+    public gameStatus:EGameStatus = EGameStatus.IN_PROGRESS;
 
     /**
-     * @ngInject
      * @param swMinefieldService
      */
     constructor(swMinefieldService:MinefieldService) {

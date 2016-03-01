@@ -1,9 +1,30 @@
-import {MinefieldData} from "../common/api";
-import {IMinefieldCell} from "../common/api";
-import {MinefieldCell} from "../common/api";
-import {MinefieldCellStatus} from "../common/api";
+import {MinefieldData, IMinefieldCell, MinefieldCell, MinefieldCellStatus} from "../common/api";
 
 class MinefieldService {
+
+    /**
+     * Uncover given cell on given minefield. All neighbours are uncovered as well in case there are
+     * no mines on adjacent cells.
+     *
+     * @param mine
+     * @param minefield
+     * @returns {number}
+     */
+    public reveal(mine:IMinefieldCell, minefield:MinefieldData):number {
+        if (mine.status === MinefieldCellStatus.REVEALED) {
+            return 0;
+        }
+        let uncovered = 1;
+        mine.status = MinefieldCellStatus.REVEALED;
+        if (!mine.hasMine && mine.neighbours === 0) {
+            for (let neighbour of minefield.getNeighbours(mine)) {
+                if (neighbour.status === MinefieldCellStatus.HIDDEN) {
+                    uncovered += this.reveal(neighbour, minefield);
+                }
+            }
+        }
+        return uncovered;
+    }
 
     /**
      * Create minefield of given dimensions and populate it with mines
@@ -31,30 +52,6 @@ class MinefieldService {
         this.randomizeMines(minefield, mines);
 
         return minefield;
-    }
-
-    /**
-     * Uncover given cell on given minefield. All neighbours are uncovered as well in case there are
-     * no mines on adjacent cells.
-     *
-     * @param mine
-     * @param minefield
-     * @returns {number}
-     */
-    public reveal(mine:IMinefieldCell, minefield:MinefieldData):number {
-        if (mine.status === MinefieldCellStatus.REVEALED) {
-            return 0;
-        }
-        let uncovered = 1;
-        mine.status = MinefieldCellStatus.REVEALED;
-        if (!mine.hasMine && mine.neighbours === 0) {
-            for (let neighbour of minefield.getNeighbours(mine)) {
-                if (neighbour.status === MinefieldCellStatus.HIDDEN) {
-                    uncovered += this.reveal(neighbour, minefield);
-                }
-            }
-        }
-        return uncovered;
     }
 
     public getHiddenCells(minefield:MinefieldData):number {
@@ -86,7 +83,7 @@ class MinefieldService {
             const cell = minefield.get(x, y);
             cell.hasMine = true;
 
-            //console.log("Mine set at:", x, y);
+            //console.log("Cell set at:", x, y);
             // initialize neighbours
             for (let neighbour of minefield.getNeighbours(cell)) {
                 neighbour.neighbours++;

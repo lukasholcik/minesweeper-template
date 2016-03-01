@@ -42,7 +42,7 @@ life cycle.
 Displays the minefield, which is basically a matrix of mines. It gets the minefield data as an attribute and 
 is supposed to draw the matrix.
 
-#### Mine: src/components/mine
+#### Cell: src/components/mine
  
 This component displays single mine cell and should display properly all it's states like e.g.: hidden, revealed, 
 revealed mine, flagged, etc. It contains a styled button and should handle it's click event properly according to 

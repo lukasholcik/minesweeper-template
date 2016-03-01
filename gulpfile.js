@@ -56,7 +56,6 @@ function runWebpack(config, callback) {
         if (buildError) {
             gutil.log(buildError);
             //throw new gutil.PluginError("webpack", buildError);
-            throw new Error();
         }
 
         gutil.log("[webpack]", stats.toString({
@@ -88,7 +87,6 @@ gulp.task("webpack:watch", function (callback) {
     wc.watch = true;
     runWebpack(wc, callback);
 });
-
 
 function browserSyncInit(baseDir, browser) {
     browser = browser === undefined ? 'default' : browser;
