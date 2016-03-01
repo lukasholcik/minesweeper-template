@@ -425,9 +425,17 @@ describe("SolarWinds MineSweeper >", ()=> {
     });
 
     /**
-     * In original MineSweeper game there is a counter that shows [total_number_of_mines - flagged_cells].
+     * Show a counter that shows [total_number_of_mines - flagged_cells].
      */
     it("shows the number of remaining mines in .sw-game__countdown element", ()=> {
+
+    });
+
+    /**
+     *
+     */
+    it("should reveal all adjacent cells with ctrl+click if number of flagged adjacent cells equals" +
+        " cellData.neighbours ", ()=>{
 
     });
 
