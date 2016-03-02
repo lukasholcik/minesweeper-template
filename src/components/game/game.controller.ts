@@ -12,7 +12,7 @@ class GameController {
     /**
      * @param swMinefieldService
      */
-    constructor(swMinefieldService:MinefieldService) {
+    constructor(private swMinefieldService:MinefieldService) {
         const width = 20;
         const height = 20;
         const mines = 50;

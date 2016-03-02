@@ -153,7 +153,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * cellData.status) and when there isn't a mine (!vm.cellData.hasMine). See the prepared method getButtonText()
      * in cell.controller.ts.
      */
-    describe("shows number of neighbours on the cell button", ()=> {
+    describe("shows number of neighbours on the cell button >", ()=> {
         it("5. show number on revealed cell", ()=>{
             $scope.minefield = smallMinefield;
 
@@ -209,7 +209,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * The buttons don't have proper sizing when there is no text displayed. Show &nbsp; on the cell button without
      * text (i.e. without neighbour count information).
      */
-    describe("shows &nbsp; on a cell button", ()=>{
+    describe("shows &nbsp; on a cell button >", ()=>{
 
         it("8. shows &nbsp; on hidden cell", ()=> {
             $scope.minefield = smallMinefield;
@@ -249,8 +249,22 @@ describe("SolarWinds MineSweeper >", ()=> {
      * 1. only add the class when the cell is revealed so that the user can't figure out anything from the page source
      * 2. don't add the class when `neighbours === 0`
      */
-    describe(".sw-cell__button--neighbour-* class", ()=>{
-        it("10. class is not added to hidden cells", ()=> {
+    describe(".sw-cell__button--neighbour-* class >", ()=>{
+        it("10. class is added when revealed and neighbours > 0", ()=> {
+            $scope.minefield = smallMinefield;
+
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            const secondCell = $(element.find(".sw-cell__button")[1]);
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+
+            expect(secondCell.hasClass("sw-cell__button--neighbours-1")).toBe(true);
+        });
+
+        it("11. class is not added to hidden cells", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -263,33 +277,19 @@ describe("SolarWinds MineSweeper >", ()=> {
             expect(secondCell.hasClass("sw-cell__button--neighbours-1")).toBe(false);
         });
 
-        it("11. class is not added when neighbours === 0", ()=> {
+        it("12. class is not added when neighbours === 0", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
             const element = getCompiledElement($compile, html, $scope);
 
             const firstCell = $(element.find(".sw-cell__button")[0]);
-            const secondCell = $(element.find(".sw-cell__button")[1]);
+            //const secondCell = $(element.find(".sw-cell__button")[1]);
 
             firstCell.triggerHandler("click");
             $scope.$apply();
 
             expect(firstCell.hasClass("sw-cell__button--neighbours-0")).toBe(false);
-        });
-
-        it("12. class is added when revealed and neighbours > 0", ()=> {
-            $scope.minefield = smallMinefield;
-
-            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
-            const element = getCompiledElement($compile, html, $scope);
-            const firstCell = $(element.find(".sw-cell__button")[0]);
-            const secondCell = $(element.find(".sw-cell__button")[1]);
-
-            firstCell.triggerHandler("click");
-            $scope.$apply();
-
-            expect(secondCell.hasClass("sw-cell__button--neighbours-1")).toBe(true);
         });
 
     });
@@ -451,7 +451,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * RESTART BUTTON
      */
 
-    describe("restart button", ()=>{
+    describe("restart button >", ()=>{
         /**
          * In `game.directive.html` there is a button that should restart the game when you click on it. You can find the logic
          * that initializes the minefield in `game.controller.ts`
