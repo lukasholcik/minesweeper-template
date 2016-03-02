@@ -115,12 +115,12 @@ describe("SolarWinds MineSweeper >", ()=> {
     it("3. executes the on-click callback with proper cellData when the .sw-cell__button is" +
         " clicked", ()=> {
         $scope.cellData = smallMinefield.matrix[0][0];
-        $scope.onClick = (cellData:api.IMinefieldCell)=> {
+        $scope.onClick = ($event:JQueryEventObject, cellData:api.IMinefieldCell)=> {
         };
 
         const eventSpy = spyOn($scope, "onClick");
 
-        const html = `<sw-cell cell-data="cellData" on-click="onClick(cellData)"></sw-cell>`;
+        const html = `<sw-cell cell-data="cellData" on-click="onClick($event, cellData)"></sw-cell>`;
         const element = getCompiledElement($compile, html, $scope);
 
         element.find(".sw-cell__button:first").triggerHandler("click");
