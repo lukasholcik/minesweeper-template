@@ -129,6 +129,10 @@ gulp.task("serve", function (callback) {
  * Run all unit tests with coverage report
  */
 gulp.task("test", function (callback) {
+    runTests(true, callback);
+});
+
+gulp.task("test:watch", function (callback) {
     runTests(false, callback);
 });
 

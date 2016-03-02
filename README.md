@@ -1,83 +1,44 @@
 # SolarWinds MineSweeper programming contest
 
-![hello](https://raw.githubusercontent.com/lukasholcik/minesweeper-template/master/minesweeper.png)
+## Main goal
 
-## How to start project
-
-### Prerequisites
-
-    npm install -g gulp tsd bower typescript
-
-### How to run project
-
-    npm install
-    gulp
+Your task will be to implement the [MineSweeper](https://en.wikipedia.org/wiki/Microsoft_Minesweeper) game by *satisfying as many prepared unit tests as possible*. Implement the test cases in order, some of them depend on previous ones!
 
 ## MineSweeper rules
 
 The rules of minesweeper are simple:
  
 - Uncover a mine, and the game ends with failure.
-- Uncover an empty square, and you keep playing.
-- Uncover a number, and it tells you how many mines lay hidden in the eight surrounding squares—information you use to 
-  deduce which nearby squares are safe to click.
-- Uncover all unmined squares to win the game.
+- Uncover an empty cell, and you keep playing.
+- Uncover a number, and it tells you how many mines lay hidden in the eight surrounding cells—information you use to 
+  deduce which nearby cells are safe to click.
+- Uncover all unmined cells to win the game.
 
-## Implementation tasks
+# Hot to setup your environment
 
-To make the contest doable in 1-2 hours, you're getting a template project with prepared data types and services to
- facilitate the implementation. You'll be focusing on building AngularJS directives and UI for the game.
+## Wi-fi
 
-## Where to look
+Network: `guest`
 
-### Main view: src/views/game
+Password: `longhornsolarwifi`
 
-This is the main view for the application. It shows the MineSweeper game board and handles management of the game 
-life cycle. 
+## How to run project
 
-### Important components
+Clone or download the zip from this repo:
 
-#### Minefield: src/components/minefield
+https://github.com/lukasholcik/minesweeper-template/
 
-Displays the minefield, which is basically a matrix of mines. It gets the minefield data as an attribute and 
-is supposed to draw the matrix.
+Run these commands in your project directory:
+```
+npm install -g gulp tsd bower typescript
+npm install
+npm start
+```
 
-#### Cell: src/components/mine
- 
-This component displays single mine cell and should display properly all it's states like e.g.: hidden, revealed, 
-revealed mine, flagged, etc. It contains a styled button and should handle it's click event properly according to 
-current state of the cell.
+## How to execute tests
 
-The states of the cell are listed in MinefieldCellStatus class members:
-- `HIDDEN` - default state of the cell
-- `REVEALED` - after clicking on the cell it shows whether there is a mine or the number of adjacent cells 
-                containing mines
-- `FLAGGED` - you can flag the cell by shift-click if you suspect it to contain a mine
-
-CSS classes to be used during mine component implementation:
-
-- `.sw-mine__button--hidden`: for hidden cell
-- `.sw-mine__button--revealed`: for revealed cell
-- `.sw-mine__button--has-mine`: for revealed cell with mine
-- `.sw-mine__button--flagged`: for flagged cell
-- `.sw-mine__button--neighbours-1` ... `.sw-mine__button--neighbours-8`: for revealed cells with respective neighbour counts 
-
-### Datatypes
-
-All used datatypes are implemented in `src/common/api.ts`.
-
-### Service: src/services/minefield.service.ts
-
-    public reveal(mine:IMinefieldCell, minefield:MinefieldData):number
-
-Use this method to reveal a cell on the minefield. Returns total number of revealed cells.
-
-### MinefieldData: src/common/api.ts#MinefieldData
-
-    public getNeighbours(cell:IMinefieldCell):IMinefieldCell[]
-    
-Useful method for retrieval of all adjacent cells for given cell.
-
-## Where to start
-
-Start the application and read the tips on the webpage to see where to start with implementation.
+Run:
+```
+npm test
+``` 
+...or the `karma.conf.js` file directly in your IDE (WebStorm supports that) to see the test results. 
