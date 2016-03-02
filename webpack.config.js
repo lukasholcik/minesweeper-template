@@ -42,7 +42,7 @@ module.exports = {
         }),
         new webpack.optimize.OccurenceOrderPlugin(),
         //new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        //new webpack.NoErrorsPlugin()
     ],
     /**
      * jQuery and angular will be provided from global variables
