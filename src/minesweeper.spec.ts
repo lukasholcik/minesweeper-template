@@ -4,6 +4,8 @@ import * as api from "./common/api";
 import MinefieldService from "./services/minefield.service";
 import MinefieldController from "./components/minefield/minefield.controller";
 import {MinefieldCellStatus} from "./common/api";
+import {MinefieldData} from "./common/api";
+import GameController from "./components/game/game.controller";
 
 function getCompiledElement($compile:ng.ICompileService, directive:string, $scope:ng.IScope):ng.IAugmentedJQuery {
     const el = angular.element(directive);
@@ -18,7 +20,8 @@ describe("SolarWinds MineSweeper >", ()=> {
     let $scope:any,
         $controller:ng.IControllerService,
         $compile:ng.ICompileService,
-        minefieldService:MinefieldService;
+        minefieldService:MinefieldService,
+        smallMinefield:MinefieldData;
     beforeEach(angular.mock.module("minesweeper"));
 
     beforeEach(inject(($injector:any)=> {
@@ -27,49 +30,48 @@ describe("SolarWinds MineSweeper >", ()=> {
         $compile = $injector.get("$compile");
         minefieldService = $injector.get("swMinefieldService");
 
-        const $templateCache:ng.ITemplateCacheService = $injector.get("$templateCache");
-    }));
+        // Minefield that looks like: 01X2X
+        smallMinefield = new api.MinefieldData(5, 1, 1, [
+            [
+                {
+                    x: 0,
+                    y: 0,
+                    hasMine: false,
+                    status: api.MinefieldCellStatus.HIDDEN,
+                    neighbours: 0
+                },
+                {
+                    x: 1,
+                    y: 0,
+                    hasMine: false,
+                    status: api.MinefieldCellStatus.HIDDEN,
+                    neighbours: 1
+                },
+                {
+                    x: 2,
+                    y: 0,
+                    hasMine: true,
+                    status: api.MinefieldCellStatus.HIDDEN,
+                    neighbours: 8
+                },
+                {
+                    x: 3,
+                    y: 0,
+                    hasMine: false,
+                    status: api.MinefieldCellStatus.HIDDEN,
+                    neighbours: 2
+                },
+                {
+                    x: 4,
+                    y: 0,
+                    hasMine: true,
+                    status: api.MinefieldCellStatus.HIDDEN,
+                    neighbours: 0
+                }
+            ]
+        ]);
 
-    // Minefield that looks like: 01X2X
-    const smallMinefield = new api.MinefieldData(5, 1, 1, [
-        [
-            {
-                x: 0,
-                y: 0,
-                hasMine: false,
-                status: api.MinefieldCellStatus.HIDDEN,
-                neighbours: 0
-            },
-            {
-                x: 1,
-                y: 0,
-                hasMine: false,
-                status: api.MinefieldCellStatus.HIDDEN,
-                neighbours: 1
-            },
-            {
-                x: 2,
-                y: 0,
-                hasMine: true,
-                status: api.MinefieldCellStatus.HIDDEN,
-                neighbours: 0
-            },
-            {
-                x: 3,
-                y: 0,
-                hasMine: false,
-                status: api.MinefieldCellStatus.HIDDEN,
-                neighbours: 2
-            },
-            {
-                x: 4,
-                y: 0,
-                hasMine: true,
-                status: api.MinefieldCellStatus.HIDDEN,
-                neighbours: 0
-            }
-        ]
-    ]);
+    }));
 
     /**
      * In `minefield.directive.html` you can see the first cell already rendered. Your task is to display all cells
@@ -102,7 +104,7 @@ describe("SolarWinds MineSweeper >", ()=> {
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
         const element = getCompiledElement($compile, html, $scope);
 
-        expect(element.find(".sw-cell__button:first").hasClass("sw-cell_button--hidden")).toBe(true);
+        expect(element.find(".sw-cell__button:first").hasClass("sw-cell__button--hidden")).toBe(true);
     });
 
     /**
@@ -112,13 +114,13 @@ describe("SolarWinds MineSweeper >", ()=> {
      */
     it("executes the on-click callback with proper cellData when the .sw-cell__button is" +
         " clicked", ()=> {
-        $scope.cellData = smallMinefield[0][0];
+        $scope.cellData = smallMinefield.matrix[0][0];
         $scope.onClick = (cellData:api.IMinefieldCell)=> {
         };
 
         const eventSpy = spyOn($scope, "onClick");
 
-        const html = `<sw-cell cell-data="onClick(cellData)" on-click="onClick"></sw-cell>`;
+        const html = `<sw-cell cell-data="cellData" on-click="onClick(cellData)"></sw-cell>`;
         const element = getCompiledElement($compile, html, $scope);
 
         element.find(".sw-cell__button:first").triggerHandler("click");
@@ -141,46 +143,91 @@ describe("SolarWinds MineSweeper >", ()=> {
 
         element.find(".sw-cell__button:first").triggerHandler("click");
         $scope.$apply();
+        expect($(element.find(".sw-cell__button")[0]).hasClass("sw-cell__button--revealed")).toBe(true);
         expect($(element.find(".sw-cell__button")[1]).hasClass("sw-cell__button--revealed")).toBe(true);
     });
 
     /**
      * In cell.directive.html, you're expected to display the number of mines on adjacent cells. Access this information
-     * through `vm.cellData.neighbours`. Show the number only when it's > 0 and only when the cell is revealed (check
-     * cellData.status).
+     * through `vm.cellData.neighbours`. Show the number only when it's > 0 when the cell is revealed (check
+     * cellData.status) and when there isn't a mine (!vm.cellData.hasMine).
      */
-    it("shows number of neighbours on the cell button when neighbours > 1", ()=> {
-        $scope.minefield = smallMinefield;
+    describe("shows number of neighbours on the cell button", ()=> {
+        it("doesn't show number when neighbours === 0", ()=>{
+            $scope.minefield = smallMinefield;
 
-        const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
-        const element = getCompiledElement($compile, html, $scope);
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
 
-        var firstCell = $(element.find(".sw-cell__button")[0]);
-        var secondCell = $(element.find(".sw-cell__button")[1]);
-        firstCell.triggerHandler("click");
-        $scope.$apply();
-        expect(firstCell.text().trim()).not.toBe("0");
-        expect(secondCell.text().trim()).toBe("1");
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+
+            expect(firstCell.text().trim()).not.toBe("0");
+        });
+
+        it("show number on revealed cell", ()=>{
+            $scope.minefield = smallMinefield;
+
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            const secondCell = $(element.find(".sw-cell__button")[1]);
+            expect(secondCell.text().trim()).not.toBe("1");
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+
+            expect(secondCell.text().trim()).toBe("1");
+        });
+
+        it("doesn't show number on revealed cell with mine", ()=> {
+            $scope.minefield = smallMinefield;
+
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+
+            const mineCell = $(element.find(".sw-cell__button")[2]);
+            mineCell.triggerHandler("click");
+            $scope.$apply();
+            expect(mineCell.text().trim()).toBe("");
+        });
     });
 
     /**
      * The buttons don't have proper sizing when there is no text displayed. Show &nbsp; on the cell button without
      * text (i.e. without neighbour count information).
      */
-    it("shows &nbsp; on a cell button when there are no neighbours", ()=> {
-        $scope.minefield = smallMinefield;
+    describe("shows &nbsp; on a cell button", ()=>{
 
-        const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
-        const element = getCompiledElement($compile, html, $scope);
+        it("shows &nbsp; on hidden cell", ()=> {
+            $scope.minefield = smallMinefield;
 
-        var firstCell = $(element.find(".sw-cell__button")[0]);
-        // before reveal
-        expect(firstCell.text().trim()).toBe("&nbsp;");
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
 
-        firstCell.triggerHandler("click");
-        $scope.$apply();
-        // after reveal
-        expect(firstCell.text().trim()).toBe("&nbsp;");
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            // before reveal
+            expect(firstCell.hasClass("sw-cell__button--hidden")).toBe(true);
+            expect(firstCell.html().trim()).toBe("&nbsp;");
+        });
+
+        it("shows &nbsp; on revealed cell with no neighbours", ()=> {
+            $scope.minefield = smallMinefield;
+
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+            // after reveal
+            expect(firstCell.html().trim()).toBe("&nbsp;");
+        });
+
     });
 
     /*
@@ -193,23 +240,49 @@ describe("SolarWinds MineSweeper >", ()=> {
      * 1. only add the class when the cell is revealed so that the user can't figure out anything from the page source
      * 2. don't add the class when `neighbours === 0`
      */
-    it("adds proper .sw-cell__button--neighbour-* class to cell button", ()=> {
-        $scope.minefield = smallMinefield;
+    describe(".sw-cell__button--neighbour-* class", ()=>{
+        it("class is not added to hidden cells", ()=> {
+            $scope.minefield = smallMinefield;
 
-        const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
-        const element = getCompiledElement($compile, html, $scope);
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
 
-        var firstCell = $(element.find(".sw-cell__button")[0]);
-        var secondCell = $(element.find(".sw-cell__button")[1]);
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            const secondCell = $(element.find(".sw-cell__button")[1]);
 
-        expect(firstCell.hasClass(".sw-cell__button--neighbours-0")).toBe(false);
-        expect(secondCell.hasClass(".sw-cell__button--neighbours-1")).toBe(false);
+            expect(firstCell.hasClass("sw-cell__button--neighbours-0")).toBe(false);
+            expect(secondCell.hasClass("sw-cell__button--neighbours-1")).toBe(false);
+        });
 
-        firstCell.triggerHandler("click");
-        $scope.$apply();
+        it("class is not added when neighbours === 0", ()=> {
+            $scope.minefield = smallMinefield;
 
-        expect(firstCell.hasClass(".sw-cell__button--neighbours-0")).toBe(false);
-        expect(secondCell.hasClass(".sw-cell__button--neighbours-1")).toBe(true);
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            const secondCell = $(element.find(".sw-cell__button")[1]);
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+
+            expect(firstCell.hasClass("sw-cell__button--neighbours-0")).toBe(false);
+        });
+
+        it("class is added when revealed and neighbours > 0", ()=> {
+            $scope.minefield = smallMinefield;
+
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            const secondCell = $(element.find(".sw-cell__button")[1]);
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+
+            expect(secondCell.hasClass("sw-cell__button--neighbours-1")).toBe(true);
+        });
+
     });
 
     /**
@@ -222,11 +295,11 @@ describe("SolarWinds MineSweeper >", ()=> {
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
         const element = getCompiledElement($compile, html, $scope);
 
-        var mineCell = $(element.find(".sw-cell__button")[2]);
-        expect(mineCell.hasClass(".sw-cell__button--has-mine")).toBe(false);
+        const mineCell = $(element.find(".sw-cell__button")[2]);
+        expect(mineCell.hasClass("sw-cell__button--has-mine")).toBe(false);
         mineCell.triggerHandler("click");
         $scope.$apply();
-        expect(mineCell.hasClass(".sw-cell__button--has-mine")).toBe(true);
+        expect(mineCell.hasClass("sw-cell__button--has-mine")).toBe(true);
     });
 
     /*
@@ -244,11 +317,11 @@ describe("SolarWinds MineSweeper >", ()=> {
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
         const element = getCompiledElement($compile, html, $scope);
 
-        var mineCell = $(element.find(".sw-cell__button")[3]);
+        const mineCell = $(element.find(".sw-cell__button")[3]);
         mineCell.triggerHandler("click");
         $scope.$apply();
         for (let i = 0; i < 3; i++) {
-            var cell = $(element.find(".sw-cell__button")[i]);
+            const cell = $(element.find(".sw-cell__button")[i]);
             expect(cell.is("[disabled]")).toBe(true);
         }
     });
@@ -272,7 +345,7 @@ describe("SolarWinds MineSweeper >", ()=> {
         $scope.$apply();
 
         for (let i = 0; i < 3; i++) {
-            var cell = $(element.find(".sw-cell__button")[i]);
+            const cell = $(element.find(".sw-cell__button")[i]);
             expect(cell.is("[disabled]")).toBe(true);
         }
     });
@@ -294,11 +367,9 @@ describe("SolarWinds MineSweeper >", ()=> {
         const element = getCompiledElement($compile, html, $scope);
 
         const firstCell = element.find(".sw-cell__button:first");
-        const event:JQueryEventObject = <JQueryEventObject>{};
-        event.which = 1;
-        event.target = firstCell[0];
-        event.shiftKey = true;
-        firstCell.triggerHandler(event);
+        var shiftClick = jQuery.Event("click");
+        shiftClick.shiftKey = true;
+        firstCell.triggerHandler(shiftClick);
         $scope.$apply();
         expect(firstCell.hasClass("sw-cell__button--flagged")).toBe(true);
     });
@@ -317,11 +388,9 @@ describe("SolarWinds MineSweeper >", ()=> {
         $scope.$apply();
         expect(firstCell.hasClass("sw-cell__button--revealed")).toBe(true);
 
-        const event:JQueryEventObject = <JQueryEventObject>{};
-        event.button = 1;
-        event.target = firstCell[0];
-        event.shiftKey = true;
-        firstCell.triggerHandler(event);
+        var shiftClick = jQuery.Event("click");
+        shiftClick.shiftKey = true;
+        firstCell.triggerHandler(shiftClick);
         $scope.$apply();
         expect(firstCell.hasClass("sw-cell__button--flagged")).not.toBe(true);
     });
@@ -334,13 +403,12 @@ describe("SolarWinds MineSweeper >", ()=> {
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
         const element = getCompiledElement($compile, html, $scope);
-
         const firstCell = element.find(".sw-cell__button:first");
-        const event:JQueryEventObject = <JQueryEventObject>{};
-        event.which = 1;
-        event.target = firstCell[0];
-        event.shiftKey = true;
-        firstCell.triggerHandler(event);
+        expect(firstCell.hasClass("sw-cell__button--hidden")).toBe(true);
+
+        var shiftClick = jQuery.Event("click");
+        shiftClick.shiftKey = true;
+        firstCell.triggerHandler(shiftClick);
         $scope.$apply();
         expect(firstCell.hasClass("sw-cell__button--revealed")).toBe(false);
         expect(firstCell.hasClass("sw-cell__button--flagged")).toBe(true);
@@ -348,7 +416,7 @@ describe("SolarWinds MineSweeper >", ()=> {
         firstCell.triggerHandler("click");
         $scope.$apply();
         expect(firstCell.hasClass("sw-cell__button--flagged")).toBe(false);
-        expect(firstCell.hasClass("sw-cell__button--revealed")).toBe(true);
+        expect(firstCell.hasClass("sw-cell__button--hidden")).toBe(true);
     });
 
     /**
@@ -360,12 +428,11 @@ describe("SolarWinds MineSweeper >", ()=> {
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
         const element = getCompiledElement($compile, html, $scope);
 
-        var mineCell = $(element.find(".sw-cell__button")[3]);
-        mineCell.triggerHandler("click");
+        const mineCell1 = $(element.find(".sw-cell__button")[2]);
+        mineCell1.triggerHandler("click");
         $scope.$apply();
 
-        const mineCell1 = $(element.find(".sw-cell__button")[3]);
-        const mineCell2 = $(element.find(".sw-cell__button")[5]);
+        const mineCell2 = $(element.find(".sw-cell__button")[4]);
 
         expect(mineCell1.hasClass("sw-cell__button--revealed")).toBe(true);
         expect(mineCell2.hasClass("sw-cell__button--revealed")).toBe(true);
@@ -375,52 +442,79 @@ describe("SolarWinds MineSweeper >", ()=> {
      * RESTART BUTTON
      */
 
-    /**
-     * In `game.directive.html` there is a button that should restart the game when you click on it. You can find the logic
-     * that initializes the minefield in `game.controller.ts`
-     */
-    it("restarts the game by clicking on the `sw-game__restart-button`", ()=> {
-        const html = `<sw-game></sw-game>`;
-        const element = getCompiledElement($compile, html, $scope);
+    describe("restart button", ()=>{
+        /**
+         * In `game.directive.html` there is a button that should restart the game when you click on it. You can find the logic
+         * that initializes the minefield in `game.controller.ts`
+         */
+        it("restarts the game by clicking on the `sw-game__restart-button`", ()=> {
+            const html = `<sw-game></sw-game>`;
+            const element = getCompiledElement($compile, html, $scope);
 
-        const minefieldCtrl = <MinefieldController> element.find(".sw-minefield").controller("swMinefield");
-        minefieldCtrl.minefield = smallMinefield;
-        $scope.$apply();
+            const minefieldCtrl = <MinefieldController> element.find(".sw-minefield").controller("swMinefield");
+            minefieldCtrl.minefield = smallMinefield;
+            $scope.$apply();
 
-        // click on a mine to make sure the game is lost
-        const mineCell = $(element.find(".sw-cell__button")[3]);
-        mineCell.triggerHandler("click");
-        $scope.$apply();
-        expect(minefieldCtrl.minefield[0][3].status).toBe(MinefieldCellStatus.REVEALED);
+            // click on a mine to make sure the game is lost
+            const mineCell = $(element.find(".sw-cell__button")[2]);
+            mineCell.triggerHandler("click");
+            $scope.$apply();
+            expect(minefieldCtrl.minefield.matrix[0][2].status).toBe(MinefieldCellStatus.REVEALED);
 
-        const restartButton = element.find(".sw-game__restart-button");
-        restartButton.triggerHandler("click");
+            const restartButton = element.find(".sw-game__restart-button");
+            restartButton.triggerHandler("click");
 
-        // make sure all cells are hidden again
-        for (let i = 0; i < minefieldCtrl.minefield[0].length; i++) {
-            expect(minefieldCtrl.minefield[0][i].status).toBe(MinefieldCellStatus.HIDDEN);
-        }
-    });
+            // make sure all cells are hidden again
+            for (let cell of minefieldCtrl.minefield.matrix[0]) {
+                expect(cell.status).toBe(MinefieldCellStatus.HIDDEN);
+            }
+        });
 
-    /**
-     * While the game is in progress (GameController.gameStatus === EGameStatus.IN_PROGRESS), there should be a
-     * .sw-game__restart-button--in-progress class on the restart button.
-     */
-    it("adds sw-game__restart-button--in-progress class to button while the game is in progress", ()=> {
+        /**
+         * While the game is in progress (GameController.gameStatus === EGameStatus.IN_PROGRESS), there should be a
+         * .sw-game__restart-button--in-progress class on the restart button.
+         */
+        it("adds sw-game__restart-button--in-progress class to button while the game is in progress", ()=> {
+            const html = `<sw-game></sw-game>`;
+            const element = getCompiledElement($compile, html, $scope);
 
-    });
+            const gameCtrl:GameController = element.controller("swGame");
+            gameCtrl.gameStatus = api.EGameStatus.IN_PROGRESS;
+            $scope.$apply();
 
-    /**
-     * Add .sw-game__restart-button--fail class on the restart button when the player lost the game.
-     */
-    it("adds sw-game__restart-button--fail class to restart button when the player lost the game", ()=> {
+            var restartButton = element.find(".sw-game__restart-button");
+            expect(restartButton.hasClass("sw-game__restart-button--in-progress")).toBe(true);
+        });
 
-    });
+        /**
+         * Add .sw-game__restart-button--fail class on the restart button when the player lost the game.
+         */
+        it("adds sw-game__restart-button--fail class to restart button when the player lost the game", ()=> {
+            const html = `<sw-game></sw-game>`;
+            const element = getCompiledElement($compile, html, $scope);
 
-    /**
-     * Add .sw-game__restart-button--fail class on the restart button when the player lost the game.
-     */
-    it("adds sw-game__restart-button--success class to restart button when the player won the game", ()=> {
+            const gameCtrl:GameController = element.controller("swGame");
+            gameCtrl.gameStatus = api.EGameStatus.FAIL;
+            $scope.$apply();
+
+            var restartButton = element.find(".sw-game__restart-button");
+            expect(restartButton.hasClass("sw-game__restart-button--fail")).toBe(true);
+        });
+
+        /**
+         * Add .sw-game__restart-button--fail class on the restart button when the player lost the game.
+         */
+        it("adds sw-game__restart-button--success class to restart button when the player won the game", ()=> {
+            const html = `<sw-game></sw-game>`;
+            const element = getCompiledElement($compile, html, $scope);
+
+            const gameCtrl:GameController = element.controller("swGame");
+            gameCtrl.gameStatus = api.EGameStatus.SUCCESS;
+            $scope.$apply();
+
+            var restartButton = element.find(".sw-game__restart-button");
+            expect(restartButton.hasClass("sw-game__restart-button--success")).toBe(true);
+        });
 
     });
 
@@ -436,7 +530,6 @@ describe("SolarWinds MineSweeper >", ()=> {
      */
     it("should reveal all adjacent cells with ctrl+click if number of flagged adjacent cells equals" +
         " cellData.neighbours ", ()=>{
-
     });
 
 });

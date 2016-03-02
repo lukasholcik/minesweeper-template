@@ -64,7 +64,7 @@ export class MinefieldData {
     constructor(public width: number,
                 public height: number,
                 public mines: number,
-                private matrix:IMinefieldCell[][]) {
+                public matrix:IMinefieldCell[][]) {
     }
 
     /**
@@ -96,4 +96,10 @@ export class MinefieldData {
         return result;
     }
 
+}
+
+export enum EGameStatus {
+    IN_PROGRESS = 0,
+    SUCCESS = 1,
+    FAIL = -1
 }

@@ -128,7 +128,7 @@ gulp.task("test", function (callback) {
     runTests(false, callback);
 });
 
-function runTests(singleRun, coverage, teamcity, callback) {
+function runTests(singleRun, callback) {
     var reporters = ["progress"];
     var preprocessors = {
         "**/*.ts": ["webpack"]
