@@ -2,6 +2,7 @@
 
 import * as api from "../../common/api";
 import GameController from "./game.controller";
+import "./game.directive.less";
 
 class Game implements ng.IDirective {
 

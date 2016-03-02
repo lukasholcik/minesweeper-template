@@ -20,7 +20,7 @@ class MinefieldController {
     /**
      * Click callback for given cell
      */
-    public onClick = (cellData:api.IMinefieldCell)=> {
+    public onClick = ($event:JQueryEventObject, cellData:api.IMinefieldCell):void => {
 
     };
 

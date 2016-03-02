@@ -10,12 +10,14 @@ import * as api from "../../common/api";
 class MineController {
 
     public cellData:api.MinefieldCell;
+    public onClick:(args:{$event:JQueryEventObject, cellData:api.IMinefieldCell})=>void;
+
 
     /**
      * @param swMinefieldService
      * @param $sce this service can be used to trust html from a string e.g. $sce.trustAsHtml("&nbsp;")
      */
-    constructor(private swMinefieldService:MinefieldService, private $sce:ng.ISCEService) {
+    constructor(private swMinefieldService:MinefieldService) {
     }
 
     /**
@@ -23,11 +25,15 @@ class MineController {
      */
     public getButtonClasses() {
         return {
-            'sw-mine__button--hidden': false /* TODO: implement this condition */,
-            'sw-mine__button--revealed': false /* TODO: implement this condition */,
-            'sw-mine__button--has-mine': false /* TODO: implement this condition */,
-            'sw-mine__button--flagged': false /* TODO: implement this condition */
+            'sw-cell__button--hidden': false /* TODO: implement this condition */,
+            'sw-cell__button--revealed': false /* TODO: implement this condition */,
+            'sw-cell__button--has-mine': false /* TODO: implement this condition */,
+            'sw-cell__button--flagged': false /* TODO: implement this condition */
         };
+    }
+
+    public getButtonText() {
+        return "?";
     }
 
 }

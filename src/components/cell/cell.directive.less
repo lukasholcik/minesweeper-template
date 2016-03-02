@@ -28,10 +28,29 @@
         &--has-mine {
             background-color: red;
             color: transparent;
+            position: relative;
+
+            &:before {
+                font-family: FontAwesome;
+                content: "\f1e2";
+                color: white;
+                position: absolute;
+                left: 15%;
+            }
         }
 
         &--flagged {
-            background-color: green;
+            //background-color: green;
+            color: transparent;
+            position: relative;
+
+            &:before {
+                font-family: FontAwesome;
+                content: "\f11d";
+                color: black;
+                position: absolute;
+                left: 15%;
+            }
         }
 
         &--neighbours {

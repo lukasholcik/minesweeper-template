@@ -78,7 +78,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * in the minefield. The two dimensional array is available as vm.minefield.matrix. Display the matrix as a
      * table.
      */
-    it("shows minefield matrix for given data", ()=> {
+    it("1. shows minefield matrix for given data", ()=> {
         const height = 10;
         const width = 10;
         const randomMinefield = minefieldService.newMinefield(width, height, 10);
@@ -97,7 +97,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * To access the cell state value use this.cellData.status. Find the possible value in the MinefieldCellStatus
      * class in common/api.ts
      */
-    it("adds .sw-cell__button--hidden class when the sw-cell button status is" +
+    it("2. adds .sw-cell__button--hidden class when the sw-cell button status is" +
         " MinefieldCellStatus.HIDDEN", ()=> {
         $scope.minefield = smallMinefield;
 
@@ -112,7 +112,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * passed from minefield.directive.html. Don't forget to pass the `cellData` argument properly (hint:
      * vm.onClick({cellData: ...}))
      */
-    it("executes the on-click callback with proper cellData when the .sw-cell__button is" +
+    it("3. executes the on-click callback with proper cellData when the .sw-cell__button is" +
         " clicked", ()=> {
         $scope.cellData = smallMinefield.matrix[0][0];
         $scope.onClick = (cellData:api.IMinefieldCell)=> {
@@ -126,7 +126,7 @@ describe("SolarWinds MineSweeper >", ()=> {
         element.find(".sw-cell__button:first").triggerHandler("click");
         $scope.$apply();
 
-        expect(eventSpy).toHaveBeenCalledWith($scope.cellData);
+        expect(eventSpy).toHaveBeenCalledWith(jasmine.anything(), $scope.cellData);
     });
 
     /**
@@ -135,7 +135,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * service in `services/minefield.service.ts`. Don't forget to access it as `this.swMinefieldService` in
      * TypeScript class.
      */
-    it("uses swMinefieldService.reveal() to reveal the cell", ()=> {
+    it("4. uses swMinefieldService.reveal() to reveal the cell", ()=> {
         $scope.minefield = smallMinefield;
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -150,24 +150,11 @@ describe("SolarWinds MineSweeper >", ()=> {
     /**
      * In cell.directive.html, you're expected to display the number of mines on adjacent cells. Access this information
      * through `vm.cellData.neighbours`. Show the number only when it's > 0 when the cell is revealed (check
-     * cellData.status) and when there isn't a mine (!vm.cellData.hasMine).
+     * cellData.status) and when there isn't a mine (!vm.cellData.hasMine). See the prepared method getButtonText()
+     * in cell.controller.ts.
      */
     describe("shows number of neighbours on the cell button", ()=> {
-        it("doesn't show number when neighbours === 0", ()=>{
-            $scope.minefield = smallMinefield;
-
-            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
-            const element = getCompiledElement($compile, html, $scope);
-
-            const firstCell = $(element.find(".sw-cell__button")[0]);
-
-            firstCell.triggerHandler("click");
-            $scope.$apply();
-
-            expect(firstCell.text().trim()).not.toBe("0");
-        });
-
-        it("show number on revealed cell", ()=>{
+        it("5. show number on revealed cell", ()=>{
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -183,11 +170,33 @@ describe("SolarWinds MineSweeper >", ()=> {
             expect(secondCell.text().trim()).toBe("1");
         });
 
-        it("doesn't show number on revealed cell with mine", ()=> {
+        it("6. doesn't show number when neighbours === 0", ()=>{
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
             const element = getCompiledElement($compile, html, $scope);
+
+            const firstCell = $(element.find(".sw-cell__button")[0]);
+            const secondCell = $(element.find(".sw-cell__button")[1]);
+
+            firstCell.triggerHandler("click");
+            $scope.$apply();
+
+            expect(secondCell.text().trim()).toBe("1");
+            expect(firstCell.text().trim()).not.toBe("0");
+        });
+
+        it("7. doesn't show number on revealed cell with mine", ()=> {
+            $scope.minefield = smallMinefield;
+
+            const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
+            const element = getCompiledElement($compile, html, $scope);
+
+            // just check previous use-case
+            const secondCell = $(element.find(".sw-cell__button")[1]);
+            secondCell.triggerHandler("click");
+            $scope.$apply();
+            expect(secondCell.text().trim()).toBe("1");
 
             const mineCell = $(element.find(".sw-cell__button")[2]);
             mineCell.triggerHandler("click");
@@ -202,7 +211,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      */
     describe("shows &nbsp; on a cell button", ()=>{
 
-        it("shows &nbsp; on hidden cell", ()=> {
+        it("8. shows &nbsp; on hidden cell", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -214,7 +223,7 @@ describe("SolarWinds MineSweeper >", ()=> {
             expect(firstCell.html().trim()).toBe("&nbsp;");
         });
 
-        it("shows &nbsp; on revealed cell with no neighbours", ()=> {
+        it("9. shows &nbsp; on revealed cell with no neighbours", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -241,7 +250,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * 2. don't add the class when `neighbours === 0`
      */
     describe(".sw-cell__button--neighbour-* class", ()=>{
-        it("class is not added to hidden cells", ()=> {
+        it("10. class is not added to hidden cells", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -254,7 +263,7 @@ describe("SolarWinds MineSweeper >", ()=> {
             expect(secondCell.hasClass("sw-cell__button--neighbours-1")).toBe(false);
         });
 
-        it("class is not added when neighbours === 0", ()=> {
+        it("11. class is not added when neighbours === 0", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -269,7 +278,7 @@ describe("SolarWinds MineSweeper >", ()=> {
             expect(firstCell.hasClass("sw-cell__button--neighbours-0")).toBe(false);
         });
 
-        it("class is added when revealed and neighbours > 0", ()=> {
+        it("12. class is added when revealed and neighbours > 0", ()=> {
             $scope.minefield = smallMinefield;
 
             const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -289,7 +298,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * When the cell is revealed and there is a mine on the cell, there should be a .sw-cell__button--has-mine on
      * the button.
      */
-    it("should add .sw-cell__button--has-mine class to revealed cell button with a mine", ()=> {
+    it("13. should add .sw-cell__button--has-mine class to revealed cell button with a mine", ()=> {
         $scope.minefield = smallMinefield;
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -310,7 +319,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * In minefield.controller.ts, there is a gameStatus property. Set and use this information to disable the whole
      * minefield once the user reveals a cell with mine present.
      */
-    it("should disable whole minefield (all minefield cell buttons) after revealing a " +
+    it("14. should disable whole minefield (all minefield cell buttons) after revealing a " +
         "cell with a mine - i.e. player loses the game", ()=> {
         $scope.minefield = smallMinefield;
 
@@ -332,7 +341,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * - number of mines. Minefield info like dimensions and number of mines is accessible in
      * `minefield.controller.ts` through `vm.minefield` attributes `height`, `width`, `mines`.
      */
-    it("should disable whole minefield (all minefield cell buttons) after revealing " +
+    it("15. should disable whole minefield (all minefield cell buttons) after revealing " +
         "all cells without mines - i.e. player wins the game", ()=> {
         $scope.minefield = smallMinefield;
 
@@ -360,7 +369,7 @@ describe("SolarWinds MineSweeper >", ()=> {
      * use shift+click for this feature. Change the cell status to MinefieldCellStatus.FLAGGED when the user clicks a
      * hidden cell with shift key pressed.
      */
-    it("shift+click on hidden cell should set the state to FLAGGED", ()=> {
+    it("16. shift+click on hidden cell should set the state to FLAGGED", ()=> {
         $scope.minefield = smallMinefield;
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -377,7 +386,7 @@ describe("SolarWinds MineSweeper >", ()=> {
     /**
      * Flagging shouldn't work for revealed cells.
      */
-    it("shift+click on revealed cell shouldn't flag it", ()=> {
+    it("17. shift+click on revealed cell shouldn't flag it", ()=> {
         $scope.minefield = smallMinefield;
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -398,7 +407,7 @@ describe("SolarWinds MineSweeper >", ()=> {
     /**
      * Clicking on a flagged cell should set the state back to HIDDEN.
      */
-    it("click on flagged cell should set the state to HIDDEN", ()=> {
+    it("18. click on flagged cell should set the state to HIDDEN", ()=> {
         $scope.minefield = smallMinefield;
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -422,7 +431,7 @@ describe("SolarWinds MineSweeper >", ()=> {
     /**
      * When player clicks a cell with a mine, all the mines on the minefield should be revealed.
      */
-    it("should reveal all mines when game was lost", ()=> {
+    it("19. should reveal all mines when game was lost", ()=> {
         $scope.minefield = smallMinefield;
 
         const html = `<sw-minefield minefield="minefield"></sw-minefield>`;
@@ -447,7 +456,7 @@ describe("SolarWinds MineSweeper >", ()=> {
          * In `game.directive.html` there is a button that should restart the game when you click on it. You can find the logic
          * that initializes the minefield in `game.controller.ts`
          */
-        it("restarts the game by clicking on the `sw-game__restart-button`", ()=> {
+        it("20. restarts the game by clicking on the `sw-game__restart-button`", ()=> {
             const html = `<sw-game></sw-game>`;
             const element = getCompiledElement($compile, html, $scope);
 
@@ -474,7 +483,7 @@ describe("SolarWinds MineSweeper >", ()=> {
          * While the game is in progress (GameController.gameStatus === EGameStatus.IN_PROGRESS), there should be a
          * .sw-game__restart-button--in-progress class on the restart button.
          */
-        it("adds sw-game__restart-button--in-progress class to button while the game is in progress", ()=> {
+        it("21. adds sw-game__restart-button--in-progress class to button while the game is in progress", ()=> {
             const html = `<sw-game></sw-game>`;
             const element = getCompiledElement($compile, html, $scope);
 
@@ -489,7 +498,7 @@ describe("SolarWinds MineSweeper >", ()=> {
         /**
          * Add .sw-game__restart-button--fail class on the restart button when the player lost the game.
          */
-        it("adds sw-game__restart-button--fail class to restart button when the player lost the game", ()=> {
+        it("22. adds sw-game__restart-button--fail class to restart button when the player lost the game", ()=> {
             const html = `<sw-game></sw-game>`;
             const element = getCompiledElement($compile, html, $scope);
 
@@ -504,7 +513,7 @@ describe("SolarWinds MineSweeper >", ()=> {
         /**
          * Add .sw-game__restart-button--fail class on the restart button when the player lost the game.
          */
-        it("adds sw-game__restart-button--success class to restart button when the player won the game", ()=> {
+        it("23. adds sw-game__restart-button--success class to restart button when the player won the game", ()=> {
             const html = `<sw-game></sw-game>`;
             const element = getCompiledElement($compile, html, $scope);
 
@@ -518,18 +527,18 @@ describe("SolarWinds MineSweeper >", ()=> {
 
     });
 
-    /**
-     * Show a counter that shows [total_number_of_mines - flagged_cells].
-     */
-    it("shows the number of remaining mines in .sw-game__countdown element", ()=> {
-
-    });
-
-    /**
-     *
-     */
-    it("should reveal all adjacent cells with ctrl+click if number of flagged adjacent cells equals" +
-        " cellData.neighbours ", ()=>{
-    });
+    ///**
+    // * Show a counter that shows [total_number_of_mines - flagged_cells].
+    // */
+    //it("24. shows the number of remaining mines in .sw-game__countdown element", ()=> {
+    //
+    //});
+    //
+    ///**
+    // *
+    // */
+    //it("25. should reveal all adjacent cells with ctrl+click if number of flagged adjacent cells equals" +
+    //    " cellData.neighbours ", ()=>{
+    //});
 
 });

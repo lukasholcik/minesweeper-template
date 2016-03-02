@@ -1,0 +1,40 @@
+.sw-game {
+
+    &__toolbar {
+    }
+
+    &__countdown {
+        font-size: 1.5em;
+    }
+
+    &__restart-button {
+        font-size: 300%;
+
+        &--fail {
+            background: red none !important;
+
+            &:before {
+                font-family: FontAwesome;
+                content: "\f119";
+                color: white;
+            }
+        }
+
+        &--success {
+            background: green none !important;
+
+            &:before {
+                font-family: FontAwesome;
+                content: "\f118";
+                color: white;
+            }
+        }
+
+        &--in-progress:before {
+            font-family: FontAwesome;
+            content: "\f118";
+        }
+
+    }
+
+}

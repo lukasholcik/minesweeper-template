@@ -1,9 +1,13 @@
 <div>
-    <div class="">
-        <button class="sw-game__restart-button pull-left">I'm the restart button!</button>
-
-        <div class="sw-game__countdown pull-right">I'm the countdown!</div>
+    <div class="sw-game__toolbar form-group">
+            <button class="sw-game__restart-button btn btn-default"
+                    title="This is the game restart button"></button>
     </div>
 
-    <sw-minefield minefield="vm.minefield" game-status="vm.gameStatus"></sw-minefield>
+    <div class="text-center form-group">
+        <sw-minefield minefield="vm.minefield" game-status="vm.gameStatus"></sw-minefield>
+    </div>
+
+    <div class="sw-game__countdown"></div>
+
 </div>

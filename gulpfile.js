@@ -31,7 +31,7 @@ gulp.task("clean", function() {
     ]);
 });
 
-gulp.task("resources", function () {
+gulp.task("resources", function (callback) {
     var resources = require("./conf/resources.json");
     _.forEach(resources, function (src, key) {
         gutil.log("Bundling " + key);
@@ -39,6 +39,10 @@ gulp.task("resources", function () {
             .pipe($.concat(key))
             .pipe(gulp.dest(conf.paths.serve));
     });
+    gulp.src("./bower_components/font-awesome/fonts/fontawesome-webfont.*",
+        {base: "bower_components/font-awesome/"})
+        .pipe(gulp.dest(conf.paths.serve));
+    callback();
 });
 
 gulp.task("build", ["resources"], function () {
