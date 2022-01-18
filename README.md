@@ -16,12 +16,6 @@ The rules of minesweeper are simple:
 
 # Hot to setup your environment
 
-## Wi-fi
-
-Network: `guest`
-
-Password: `longhornsolarwifi`
-
 ## How to run project
 
 Clone or download the zip from this repo:
